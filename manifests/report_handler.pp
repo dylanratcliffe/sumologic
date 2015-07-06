@@ -48,7 +48,7 @@ class sumologic::report_handler (
     path    => $puppet_conf,
   }
 
-  ini_subsetting { 'reports_console':
+  ini_subsetting { 'reports_http':
     ensure               => present,
     path                 => $puppet_conf,
     section              => 'master',
@@ -64,6 +64,6 @@ class sumologic::report_handler (
     setting => 'reporturl',
     value   => $report_url,
     path    => $puppet_conf,
-    require => Ini_setting['reports_setting'],
+    require => Ini_subsetting['reports_http'],
   }
 }
