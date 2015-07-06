@@ -46,7 +46,7 @@ class sumologic::report_handler (
   file_line { 'enable_reports':
     ensure   => present,
     line     => '    report = true',
-    match    => "/^\s*report\s*=\s*true/",
+    match    => /^\s*report\s*=\s*true/,
     multiple => true,
     path     => $puppet_conf,
   }
@@ -54,7 +54,7 @@ class sumologic::report_handler (
   file_line { 'reports_setting':
     ensure   => present,
     line     => "reports = ${handlers}",
-    match    => "/^\s*reports\s*=.*",
+    match    => /^\s*reports\s*=.*,
     multiple => true,
     path     => $puppet_conf,
     require  => File_line['enable_reports'],
@@ -63,7 +63,7 @@ class sumologic::report_handler (
   file_line { 'reporting_url':
     ensure   => present,
     line     => "reporturl = ${report_url}",
-    match    => "/^\s*reporturl\s*=.*/",
+    match    => /^\s*reporturl\s*=.*/,
     multiple => true,
     path     => $puppet_conf,
     require  => File_line['reports_setting'],
