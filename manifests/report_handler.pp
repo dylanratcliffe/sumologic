@@ -54,7 +54,7 @@ class sumologic::report_handler (
   file_line { 'reports_setting':
     ensure   => present,
     line     => "reports = ${handlers}",
-    match    => /\s*reports\s*=.*/,
+    match    => /reports.*/,
     multiple => true,
     path     => $puppet_conf,
     require  => File_line['enable_reports'],
