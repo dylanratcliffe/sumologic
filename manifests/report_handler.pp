@@ -57,7 +57,7 @@ class sumologic::report_handler (
     setting => 'reports',
     value   => $handlers,
     path    => $puppet_conf,
-    require => File_line['enable_reports'],
+    require => Ini_setting['enable_reports'],
   }
 
   ini_setting { 'report_url':
@@ -66,6 +66,6 @@ class sumologic::report_handler (
     setting => 'reporturl',
     value   => $report_url,
     path    => $puppet_conf,
-    require => File_line['reports_setting'],
+    require => Ini_setting['reports_setting'],
   }
 }
