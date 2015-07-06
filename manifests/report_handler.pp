@@ -1,47 +1,44 @@
-# == Class: sumologic
+# == Class: sumologic::report_handler
 #
-# Full description of class sumologic here.
-#
+# This class sets up the https report handler. At the moment it is not 
+# Sumologic specific so once I work out what the specifics are I can set it up 
+# more easily.
+# 
+# It is important to note that this class requires a restart of the puppet
+# server. This can be implemented with something like this:
+# 
+# ```
+# class { 'sumologic::report_handler':
+#   notify => Service['pe-puppetserver'],
+# }
+# ```
 # === Parameters
 #
-# Document parameters here.
+# [*report_url*]
+#   Address to send the reports to
 #
-# [*sample_parameter*]
-#   Explanation of what this parameter affects and what it defaults to.
-#   e.g. "Specify one or more upstream ntp servers as an array."
-#
-# === Variables
-#
-# Here you should define a list of variables that this module would require.
-#
-# [*sample_variable*]
-#   Explanation of how this variable affects the funtion of this class and if
-#   it has a default. e.g. "The parameter enc_ntp_servers must be set by the
-#   External Node Classifier as a comma separated list of hostnames." (Note,
-#   global variables should be avoided in favor of class parameters as
-#   of Puppet 2.6.)
+# [*puppet_conf*]
+#   Location of the puppet.conf file, default uses the confdir value from
+#   Puppet's settings to locate the file so it should usually be fine.
 #
 # === Examples
 #
 #  class { 'sumologic':
-#    servers => [ 'pool.ntp.org', 'ntp.local.company.com' ],
+#    report_url => 'https://reports.somewhere.com/some/api/endpoint,
 #  }
 #
 # === Authors
 #
-# Author Name <author@domain.com>
+# Dylan Ratcliffe <dylanratcliffe@puppetlabs.com>
 #
 # === Copyright
 #
-# Copyright 2015 Your name here, unless otherwise noted.
+# Copyright 2015 Dylan Ratcliffe
 #
 class sumologic::report_handler (
   $report_url,
-  $other_handlers = ['console','puppetdb'],
-  $puppet_conf = '/etc/puppetlabs/puppet/puppet.conf',
+  $puppet_conf = "${settings::confdir}/puppet.conf",
 ) {
-  #Join the array into a string
-  $handlers = join([$other_handlers, 'http'],',')
 
   ini_setting { 'enable_reports':
     ensure  => present,
@@ -51,13 +48,14 @@ class sumologic::report_handler (
     path    => $puppet_conf,
   }
 
-  ini_setting { 'reports_setting':
-    ensure  => present,
-    section => 'master',
-    setting => 'reports',
-    value   => $handlers,
-    path    => $puppet_conf,
-    require => Ini_setting['enable_reports'],
+  ini_subsetting { 'reports_console':
+    ensure               => present,
+    path                 => $puppet_conf,
+    section              => 'master',
+    setting              => 'reports',
+    subsetting           => 'http',
+    subsetting_separator => ',',
+    require              => Ini_setting['enable_reports'],
   }
 
   ini_setting { 'report_url':
