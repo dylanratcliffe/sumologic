@@ -43,36 +43,29 @@ class sumologic::report_handler (
   #Join the array into a string
   $handlers = join([$other_handlers, 'http'],',')
 
-  file_line { 'enable_reports':
-    ensure   => present,
-    line     => '    report = true',
-    match    => '\s*report\s*=\s*true',
-    multiple => true,
-    path     => $puppet_conf,
-  }
-
-  file_line { 'reports_setting':
-    ensure   => present,
-    line     => "reports = ${handlers}",
-    match    => '\s*reports\s*=.*',
-    multiple => true,
-    path     => $puppet_conf,
-    require  => File_line['enable_reports'],
-  }
-
-  file_line { 'reporting_url':
-    ensure   => present,
-    line     => "reporturl = ${report_url}",
-    match    => '\s*reporturl\s*=.*',
-    multiple => true,
-    path     => $puppet_conf,
-    require  => File_line['reports_setting'],
-  }
-
-  file_line { 'warning_comment':
+  ini_setting { 'enable_reports':
     ensure  => present,
-    line    => '# The following settings are being managed by Puppet: report, reports, reporturl',
+    section => 'agent',
+    setting => 'report',
+    value   => true,
     path    => $puppet_conf,
-    require => File_line['reporting_url'],
+  }
+
+  ini_setting { 'reports_setting':
+    ensure  => present,
+    section => 'master',
+    setting => 'reports',
+    value   => $handlers,
+    path    => $puppet_conf,
+    require => File_line['enable_reports'],
+  }
+
+  ini_setting { 'report_url':
+    ensure  => present,
+    section => 'master',
+    setting => 'reporturl',
+    value   => $report_url,
+    path    => $puppet_conf,
+    require => File_line['reports_setting'],
   }
 }
