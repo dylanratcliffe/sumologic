@@ -23,10 +23,6 @@
 #   json will send the entire puppet report as a JSON file, note that this is
 #   approx 430Kb per report but contains awesome info.
 #
-# [*puppet_conf*]
-#   Location of the puppet.conf file, default uses the confdir value from
-#   Puppet's settings to locate the file so it should usually be fine.
-#
 # === Examples
 #
 #  class { 'sumologic':
@@ -44,7 +40,6 @@
 class sumologic::report_handler (
   $report_url,
   $mode        = 'stdout',
-  $puppet_conf = "${settings::confdir}/puppet.conf",
 ) {
   # Validate the mode
   case $mode {
@@ -58,12 +53,12 @@ class sumologic::report_handler (
     section => 'agent',
     setting => 'report',
     value   => true,
-    path    => $puppet_conf,
+    path    => "${settings::confdir}/puppet.conf",
   }
 
   ini_subsetting { 'sumologic_handler':
     ensure               => present,
-    path                 => $puppet_conf,
+    path                 => "${settings::confdir}/puppet.conf",
     section              => 'master',
     setting              => 'reports',
     subsetting           => $report_handler,

@@ -67,10 +67,6 @@ send only the messages that were printed to stdout for each report while
 json will send the entire puppet report as a JSON file, note that this is
 approx 430Kb per report but contains awesome info.
 
-*puppet_conf*
-
-Location of the puppet.conf file, default uses the confdir value from
-Puppet's settings to locate the file so it should usually be fine.
 
 **Examples**
 

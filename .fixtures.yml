@@ -1,0 +1,7 @@
+fixtures:
+  repositories:
+    report_all_the_things: "https://github.com/danzilio/puppet-report_all_the_things.git"
+    stdlib: "https://github.com/puppetlabs/puppetlabs-stdlib.git"
+    inifile: "https://github.com/puppetlabs/puppetlabs-inifile.git"
+  symlinks:
+    sumologic: "#{source_dir}"
