@@ -8,20 +8,20 @@ describe 'sumologic::report_handler' do
   end
 
   context 'with incorrect mode parameter' do
-    let(:params) { 
+    let(:params) {
       {
         :report_url => 'https://www.google.com',
         :mode => 'foo'
-      } 
+      }
     }
     it { should_not compile }
   end
 
   context 'with the mode parameter omitted' do
-    let(:params) { 
+    let(:params) {
       {
         :report_url => 'https://www.google.com'
-      } 
+      }
     }
 
     it { should compile }
@@ -42,11 +42,11 @@ describe 'sumologic::report_handler' do
   end
 
   context 'with all parameters being valid in stdout mode' do
-    let(:params) { 
+    let(:params) {
       {
         :report_url => 'https://www.google.com',
         :mode => 'stdout'
-      } 
+      }
     }
 
     it { should compile }
@@ -67,7 +67,7 @@ describe 'sumologic::report_handler' do
   end
 
   context 'with all parameters being valid in json mode' do
-    let(:params) { 
+    let(:params) {
       {
         :report_url => 'https://www.google.com',
         :mode => 'json'
