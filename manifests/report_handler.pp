@@ -17,6 +17,12 @@
 # [*report_url*]
 #   Address to send the reports to
 #
+# [*mode*]
+#   `stdout` or `json`. Which underlying report handler to use. Stdout will
+#   send only the messages that were printed to stdout for each report while
+#   json will send the entire puppet report as a JSON file, note that this is
+#   approx 430Kb per report but contains awesome info.
+#
 # [*puppet_conf*]
 #   Location of the puppet.conf file, default uses the confdir value from
 #   Puppet's settings to locate the file so it should usually be fine.
@@ -37,8 +43,15 @@
 #
 class sumologic::report_handler (
   $report_url,
+  $mode        = 'stdout',
   $puppet_conf = "${settings::confdir}/puppet.conf",
 ) {
+  # Validate the mode
+  case $mode {
+    'stdout' : { $report_handler = 'sumologic_stdout' }
+    'json'   : { $report_handler = 'sumologic_json' }
+    default  : { fail('Sumologic report handler mode must be: stdout, json') }
+  }
 
   ini_setting { 'enable_reports':
     ensure  => present,
@@ -48,22 +61,21 @@ class sumologic::report_handler (
     path    => $puppet_conf,
   }
 
-  ini_subsetting { 'reports_http':
+  ini_subsetting { 'sumologic_handler':
     ensure               => present,
     path                 => $puppet_conf,
     section              => 'master',
     setting              => 'reports',
-    subsetting           => 'http',
+    subsetting           => $report_handler,
     subsetting_separator => ',',
     require              => Ini_setting['enable_reports'],
   }
 
-  ini_setting { 'report_url':
+  file { "${settings::confdir}/sumologic.yaml":
     ensure  => present,
-    section => 'master',
-    setting => 'reporturl',
-    value   => $report_url,
-    path    => $puppet_conf,
-    require => Ini_subsetting['reports_http'],
+    owner   => 'root',
+    group   => 'root',
+    mode    => '0644',
+    content => "---\n:sumologic_url: '${report_url}'",
   }
 }
