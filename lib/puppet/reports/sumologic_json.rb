@@ -3,7 +3,7 @@ require 'puppet/reportallthethings/helper'
 require 'tempfile'
 require 'json'
 
-Puppet::Reports.register_report(:sumologic) do
+Puppet::Reports.register_report(:sumologic_json) do
   desc "Process reports via Sumologic"
 
   configfile = File.join([File.dirname(Puppet.settings[:config]), "sumologic.yaml"])
