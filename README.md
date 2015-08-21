@@ -1,3 +1,5 @@
+[![Build Status](https://travis-ci.org/dylanratcliffe/sumologic.svg?branch=master)](https://travis-ci.org/dylanratcliffe/sumologic)
+
 # sumologic
 
 #### Table of Contents
