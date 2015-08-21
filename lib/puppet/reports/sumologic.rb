@@ -1,5 +1,5 @@
 require 'puppet'
-require 'puppet/reportallthethings'
+require 'puppet/reportallthethings/helper'
 require 'tempfile'
 require 'net/http'
 require 'json'
