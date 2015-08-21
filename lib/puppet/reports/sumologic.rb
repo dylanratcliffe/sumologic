@@ -1,9 +1,7 @@
 require 'puppet'
 require 'puppet/reportallthethings/helper'
 require 'tempfile'
-require 'net/http'
 require 'json'
-require 'mime/types'
 
 Puppet::Reports.register_report(:sumologic) do
   desc "Process reports via Sumologic"
@@ -11,7 +9,7 @@ Puppet::Reports.register_report(:sumologic) do
   configfile = File.join([File.dirname(Puppet.settings[:config]), "sumologic.yaml"])
   raise(Puppet::ParseError, "Sumologic report config file #{configfile} not readable") unless File.exist?(configfile)
   config = YAML.load_file(configfile)
-  sumo_url = config[:sumologic_url]
+  SUMO_URL = config[:sumologic_url]
 
   def process
     # Save the report to a file
@@ -21,7 +19,7 @@ Puppet::Reports.register_report(:sumologic) do
 
     # Just shell out to cURL to upload it, easier than constructing the request with net::HTTP
     # and probably faster than importing any more libraries.
-    result = `curl -v -X POST -T #{report_file.path} #{sumo_url}`
+    result = `curl -v -X POST -T #{report_file.path} #{SUMO_URL}`
 
     report_file.close
     report_file.unlink
