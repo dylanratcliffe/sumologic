@@ -14,7 +14,9 @@ Puppet::Reports.register_report(:sumologic_stdout) do
   def process
     # Save the report to a file
     report_file = Tempfile.new('report')
-    report_file.write(self.logs.each)
+    self.logs.each do |log|
+      report_file.write(log)
+    end
     report_file.rewind
 
     # Just shell out to cURL to upload it, easier than constructing the request with net::HTTP
