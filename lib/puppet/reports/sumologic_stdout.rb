@@ -15,7 +15,7 @@ Puppet::Reports.register_report(:sumologic_stdout) do
     # Save the report to a file
     report_file = Tempfile.new('report')
     self.logs.each do |log|
-      report_file.write(log)
+      report_file.write("#{log.to_s}\n")
     end
     report_file.rewind
 
