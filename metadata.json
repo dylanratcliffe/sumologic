@@ -22,6 +22,6 @@
     {"name":"puppetlabs-stdlib","version_requirement":">= 1.0.0"},
     {"name":"danzilio-report_all_the_things","version_requirement":">= 0.1.0"},
     {"name":"puppetlabs-inifile"}
-  ]
+  ],
 }
 
