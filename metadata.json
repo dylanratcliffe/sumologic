@@ -1,12 +1,23 @@
 {
   "name": "dylanratcliffe-sumologic",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "author": "Dylan Ratcliffe",
-  "summary": "Manages SumoLogic report processor",
+  "summary": "Installs a SumoLogic report processor",
   "license": "Apache 2.0",
   "source": "https://github.com/dylanratcliffe/sumologic",
   "project_page": "https://github.com/dylanratcliffe/sumologic",
   "issues_url": "https://github.com/dylanratcliffe/sumologic/issues",
+  "operatingsystem_support": [
+    {
+      "operatingsystem":"RedHat",
+      "operatingsystemrelease": [ "6.0", "7.0" ]
+    },
+    {
+      "operatingsystem": "Ubuntu",
+      "operatingsystemrelease": [ "12.04", "14.04" ]
+    }
+   ],
+  "tags": ["Sumologic", "Sumo", "Reports", "Report Processor"],
   "dependencies": [
     {"name":"puppetlabs-stdlib","version_requirement":">= 1.0.0"},
     {"name":"danzilio-report_all_the_things","version_requirement":">= 0.1.0"},
