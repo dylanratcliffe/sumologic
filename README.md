@@ -74,7 +74,7 @@ approx 430Kb per report but contains awesome info.
 
 ```puppet
 class { 'sumologic':
-  report_url => 'https://reports.somewhere.com/some/api/endpoint,
+  report_url => 'https://reports.somewhere.com/some/api/endpoint',
   mode       => 'json',
 }
 ```
