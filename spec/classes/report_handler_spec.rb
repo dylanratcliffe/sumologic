@@ -31,10 +31,13 @@ describe 'sumologic::report_handler' do
       'value' => 'true'
       })}
 
-    it { should contain_ini_subsetting('sumologic_handler').with({
-      'path' => "/etc/puppet/puppet.conf",
-      'subsetting' => 'sumologic_stdout'
-      })}
+    it { should contain_ini_subsetting('sumologic_json_handler').with({
+      'ensure' => 'absent'
+    })}
+
+    it { should contain_ini_subsetting('sumologic_stdout_handler').with({
+      'ensure' => 'present'
+    })}
 
     it { should contain_file("/etc/puppet/sumologic\.yaml").with({
       'content' => "---\n:sumologic_url: 'https://www.google.com'"
@@ -56,10 +59,14 @@ describe 'sumologic::report_handler' do
       'value' => 'true'
       })}
 
-    it { should contain_ini_subsetting('sumologic_handler').with({
-      'path' => "/etc/puppet/puppet.conf",
-      'subsetting' => 'sumologic_stdout'
-      })}
+    it { should contain_ini_subsetting('sumologic_json_handler').with({
+      'ensure' => 'absent'
+    })}
+
+    it { should contain_ini_subsetting('sumologic_stdout_handler').with({
+      'ensure' => 'present'
+    })}
+
 
     it { should contain_file("/etc/puppet/sumologic\.yaml").with({
       'content' => "---\n:sumologic_url: 'https://www.google.com'"
@@ -81,10 +88,14 @@ describe 'sumologic::report_handler' do
       'value' => 'true'
       })}
 
-    it { should contain_ini_subsetting('sumologic_handler').with({
-      'path' => "/etc/puppet/puppet.conf",
-      'subsetting' => 'sumologic_json'
-      })}
+    it { should contain_ini_subsetting('sumologic_json_handler').with({
+      'ensure' => 'present'
+    })}
+
+    it { should contain_ini_subsetting('sumologic_stdout_handler').with({
+      'ensure' => 'absent'
+    })}
+
 
     it { should contain_file("/etc/puppet/sumologic\.yaml").with({
       'content' => "---\n:sumologic_url: 'https://www.google.com'"
