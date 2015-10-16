@@ -43,10 +43,17 @@ class sumologic::report_handler (
 ) {
   # Validate the mode
   case $mode {
-    'stdout' : { $report_handler = 'sumologic_stdout' }
-    'json'   : { $report_handler = 'sumologic_json' }
+    'stdout' : {
+      $stdout_ensure = 'present'
+      $json_ensure = 'absent'
+    }
+    'json'   : {
+      $stdout_ensure = 'absent'
+      $json_ensure = 'present'
+    }
     default  : { fail('Sumologic report handler mode must be: stdout, json') }
   }
+
 
   ini_setting { 'enable_reports':
     ensure  => present,
@@ -56,12 +63,22 @@ class sumologic::report_handler (
     path    => "${settings::confdir}/puppet.conf",
   }
 
-  ini_subsetting { 'sumologic_handler':
-    ensure               => present,
+  ini_subsetting { 'sumologic_stdout_handler':
+    ensure               => $stdout_ensure,
     path                 => "${settings::confdir}/puppet.conf",
     section              => 'master',
     setting              => 'reports',
-    subsetting           => $report_handler,
+    subsetting           => 'sumologic_stdout',
+    subsetting_separator => ',',
+    require              => Ini_setting['enable_reports'],
+  }
+
+  ini_subsetting { 'sumologic_json_handler':
+    ensure               => $json_ensure,
+    path                 => "${settings::confdir}/puppet.conf",
+    section              => 'master',
+    setting              => 'reports',
+    subsetting           => 'sumologic_json',
     subsetting_separator => ',',
     require              => Ini_setting['enable_reports'],
   }
